@@ -31,6 +31,20 @@ def draw_lines(steps):
     return lines
 
 
+def print_lines(lines, x0, y0, x1, y1):
+    grid = [[0 for _ in range(y1 - y0 + 1)] for _ in range(x1 - x0 + 1)]
+    for (xa, ya), (xb, yb) in lines:
+        for x in range(xa, xb + 1):
+            for y in range(ya, yb + 1):
+                grid[x - x0][y - y0] = 1
+    s = ''
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            s += '#' if grid[x - x0][y - y0] else '.'
+        s += '\n'
+    print(s.rstrip())
+
+
 def next_verticals(line, lines):
     (x, top), (x1, bottom) = line
     found = None
@@ -47,9 +61,16 @@ def next_verticals(line, lines):
 
 
 def fill_lines(lines):
+    px0 = min(x for (x, y), _ in lines)
+    py0 = min(y for (x, y), _ in lines)
+    px1 = max(x for _, (x, y) in lines)
+    py1 = max(y for _, (x, y) in lines)
     area = 0
     n = len(lines)
     todo = sorted(lines)
+    print_lines(todo, px0, py0, px1, py1)
+    print("Area so far:", 0)
+    print()
     while todo:
         vert = todo.pop(0)
         top_horiz = [l for l in todo if l[0] == vert[0] and l != vert][0]
@@ -100,6 +121,9 @@ def fill_lines(lines):
             new_line = ((rhs, y0), (rhs, y1))
             todo.append(new_line)
         todo.sort()
+        print_lines(todo, px0, py0, px1, py1)
+        print("Area so far:", area)
+        print()
 
     return area
 
@@ -107,7 +131,7 @@ def fill_lines(lines):
 def main(input_file):
     lines1, lines2 = parse_input(input_file)
     print("Part 1:", fill_lines(lines1))
-    print("Part 2:", fill_lines(lines2))
+    #print("Part 2:", fill_lines(lines2))
 
 
 if __name__ == '__main__':
