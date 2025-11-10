@@ -2,8 +2,8 @@
 
 MYDIR=$(realpath $(dirname $0))
 
-year=$(date +%Y)         # e.g. "2023"
-day=$(date +%d)          # e.g. "01"
+year=${year:=$(date +%Y)}         # e.g. "2023"
+day=${day:=$(date +%d)}          # e.g. "01"
 day_short=$((10#${day})) # e.g. "1"
 
 new_dir=${MYDIR}/day${day}
